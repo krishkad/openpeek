@@ -14,6 +14,7 @@ import {
 import { Eye, EyeOff, Filter, Mail, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface Email {
   _id: string;
@@ -46,13 +47,16 @@ const Dashboard = () => {
         const res = await response.json();
 
         if (!res.success) {
+          toast.warning("failed to fetch email");
           console.log("error while fetching emails: ", res.message);
           return;
         }
 
         setEmails(res.data);
+        toast.success("email fetch successful")
       } catch (error) {
         console.log("error while fetching emails: ", error);
+        toast.warning("failed to fetch email");
       }
     };
     fetchEmails();

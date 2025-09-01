@@ -15,6 +15,7 @@ import StarterKit from "@tiptap/starter-kit";
 import { ArrowLeft, Eye, EyeOff, Paperclip, Send } from "lucide-react";
 import ModernEmailEditor from "./TextEditor";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const EmailCompose = () => {
   const [trackingEnabled, setTrackingEnabled] = useState(true);
@@ -24,6 +25,7 @@ const EmailCompose = () => {
     subject: "",
     body: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   const editorr = useEditor({
@@ -46,6 +48,7 @@ const EmailCompose = () => {
       //   });
       return;
     }
+    setIsSubmitting(true);
 
     try {
       const response = await fetch("/api/email/send", {
@@ -65,21 +68,23 @@ const EmailCompose = () => {
       const res = await response.json();
 
       if (!res.success) {
+        toast.warning("failed to send email");
         console.log(res.message);
         return;
       }
 
       console.log("email sent successfully");
+      toast.success("email sent successfully");
+      setEmailData({ to: "", from: "", subject: "", body: "" });
+      editorr.setOptions({ content: "<div></div>" });
     } catch (error) {
       console.log("error while sending email: ", error);
+      toast.warning("failed to send email");
+    } finally {
+      setIsSubmitting(false);
     }
 
-    // toast({
-    //   title: "Email Sent!",
-    //   description: trackingEnabled ?
-    //     "Your email has been sent with tracking enabled." :
-    //     "Your email has been sent without tracking."
-    // });
+   
 
     console.log({ email: editorr?.getHTML() });
   };
@@ -269,6 +274,7 @@ const EmailCompose = () => {
                 <Button variant="outline">Save Draft</Button>
                 <Button
                   onClick={handleSend}
+                  disabled={isSubmitting}
                   className="bg-primary hover:bg-primary-hover"
                 >
                   <Send className="h-4 w-4 mr-2" />
