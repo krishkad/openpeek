@@ -14,13 +14,9 @@ import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { ArrowLeft, Eye, EyeOff, Paperclip, Send } from "lucide-react";
 import ModernEmailEditor from "./TextEditor";
+import { useRouter } from "next/navigation";
 
-interface EmailComposeProps {
-  onBack: () => void;
-  onSend: () => void;
-}
-
-const EmailCompose = ({ onBack, onSend }: EmailComposeProps) => {
+const EmailCompose = () => {
   const [trackingEnabled, setTrackingEnabled] = useState(true);
   const [emailData, setEmailData] = useState({
     to: "",
@@ -28,13 +24,13 @@ const EmailCompose = ({ onBack, onSend }: EmailComposeProps) => {
     subject: "",
     body: "",
   });
+  const router = useRouter();
 
   const editorr = useEditor({
     extensions: [StarterKit, Underline, Link.configure({ openOnClick: false })],
     content: "<div></div>",
     immediatelyRender: false,
   });
-
 
   const handleSend = async () => {
     if (
@@ -97,7 +93,7 @@ const EmailCompose = ({ onBack, onSend }: EmailComposeProps) => {
             <Button
               variant="ghost"
               size="sm"
-              onClick={onBack}
+              onClick={() => router.back()}
               className="text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -270,9 +266,7 @@ const EmailCompose = ({ onBack, onSend }: EmailComposeProps) => {
               </div>
 
               <div className="flex items-center space-x-2">
-                <Button variant="outline" onClick={onBack}>
-                  Save Draft
-                </Button>
+                <Button variant="outline">Save Draft</Button>
                 <Button
                   onClick={handleSend}
                   className="bg-primary hover:bg-primary-hover"

@@ -50,12 +50,11 @@ export function SignInForm({
       console.log("SUCCESSFULLY LOGED IN: ", res.data);
       setSignInData({ email: "", password: "" });
 
-      
       Promise.resolve().then(() => {
-        router.push("/");
+        router.refresh();
       });
     } catch (error) {
-      console.log("[ERROR WILE SIGN iN]: ", error);
+      console.log("[ERROR WILE SIGN IN]: ", error);
     }
   };
 
@@ -98,7 +97,7 @@ export function SignInForm({
                     id="password"
                     name="password"
                     onChange={handleOnChange}
-                     className="h-12"
+                    className="h-12"
                     type="password"
                     required
                   />

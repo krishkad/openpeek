@@ -10,35 +10,24 @@ type AppState = "login" | "dashboard" | "compose" | "thread";
 const Home = () => {
   const [currentState, setCurrentState] = useState<AppState>("login");
 
-  const renderCurrentView = () => {
-    switch (currentState) {
-      case "login":
-        return <LoginPage onLogin={() => setCurrentState("dashboard")} />;
-      case "dashboard":
-        return (
-          <Dashboard 
-            onComposeEmail={() => setCurrentState("compose")}
-          />
-        );
-      case "compose":
-        return (
-          <EmailCompose 
-            onBack={() => setCurrentState("dashboard")}
-            onSend={() => setCurrentState("dashboard")}
-          />
-        );
-      case "thread":
-        return (
-          <EmailThread 
-            onBack={() => setCurrentState("dashboard")}
-          />
-        );
-      default:
-        return <LoginPage onLogin={() => setCurrentState("dashboard")} />;
-    }
-  };
+  // const renderCurrentView = () => {
+  //   switch (currentState) {
+  //     case "login":
+  //       return <LoginPage onLogin={() => setCurrentState("dashboard")} />;
+     
+     
+  //     case "thread":
+  //       return (
+  //         <EmailThread 
+  //           onBack={() => setCurrentState("dashboard")}
+  //         />
+  //       );
+  //     default:
+  //       return <LoginPage onLogin={() => setCurrentState("dashboard")} />;
+  //   }
+  // };
 
-  return renderCurrentView();
+  return <LoginPage />;
 };
 
 export default Home;

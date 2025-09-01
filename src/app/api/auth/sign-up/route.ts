@@ -36,9 +36,9 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const {password: _, ...others } = user._doc;
+    const { password: _, ...others } = user._doc;
 
-    const filtered_user = others
+    const filtered_user = others;
 
     const token_data = {
       id: user._id,
@@ -53,7 +53,11 @@ export async function POST(req: NextRequest) {
       data: filtered_user,
     });
 
-    response.cookies.set("email-tracker-auth-token", token);
+    response.cookies.set("email-tracker-auth-token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 7 * 24 * 60 * 60,
+    });
 
     return response;
   } catch (error) {

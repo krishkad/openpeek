@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Eye, EyeOff, Filter, Mail, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface Email {
@@ -21,17 +22,16 @@ interface Email {
   updatedAt: string
 }
 
-interface DashboardProps {
-  onComposeEmail: () => void;
-}
 
-const Dashboard = ({ onComposeEmail }: DashboardProps) => {
+
+const Dashboard = () => {
   
   // Mock email data
   const [emails, setEmails] = useState<Email[]>([]);
 
   const [filter, setFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
 
 
 
@@ -102,7 +102,7 @@ const Dashboard = ({ onComposeEmail }: DashboardProps) => {
             </div>
             <h1 className="text-xl font-semibold text-foreground">OpenPeek Dashboard</h1>
           </div>
-          <Button onClick={onComposeEmail} className="bg-primary hover:bg-primary-hover">
+          <Button  className="bg-primary hover:bg-primary-hover" onClick={() => router.push("/dashboard/send")}>
             <Mail className="h-4 w-4 mr-2" />
             Compose Email
           </Button>

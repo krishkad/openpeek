@@ -51,13 +51,13 @@ export function SignUpForm({
       }
 
       console.log("SUCCESSFULLY LOGED IN: ", res.data);
-      setSignUpData({  email: "", password: "" });
+      setSignUpData({ email: "", password: "" });
 
-    //   Promise.resolve().then(() => {
-    //     localStorage.setItem("freeposal-user", JSON.stringify(res.data));
-    //   });
+      //   Promise.resolve().then(() => {
+      //     localStorage.setItem("freeposal-user", JSON.stringify(res.data));
+      //   });
       Promise.resolve().then(() => {
-        router.push("/");
+        router.refresh();
       });
     } catch (error) {
       console.log("[ERROR WILE SIGN UP]: ", error);
@@ -74,7 +74,6 @@ export function SignUpForm({
           <form onSubmit={handleSignIn}>
             <div className="grid gap-6">
               <div className="grid gap-6">
-                
                 <div className="grid gap-3">
                   <Label htmlFor="email">Email</Label>
                   <Input

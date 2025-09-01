@@ -2,12 +2,12 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, Eye, Mail, Shield } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-interface LoginPageProps {
-  onLogin: () => void;
-}
 
-const LoginPage = ({ onLogin }: LoginPageProps) => {
+
+const LoginPage = () => {
+  const router = useRouter();
   return (
     <div className="min-h-screen bg-gradient-to-br from-accent via-background to-secondary flex items-center justify-center p-4">
       <div className="max-w-md w-full space-y-8">
@@ -62,7 +62,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
 
             {/* Login Button */}
             <Button 
-              onClick={onLogin}
+              onClick={() => router.push("/dashboard")}
               className="w-full bg-primary hover:bg-primary-hover"
               size="lg"
             >

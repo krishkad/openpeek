@@ -48,7 +48,11 @@ export async function POST(req: NextRequest) {
       data: filtered_user,
     });
 
-    response.cookies.set("email-tracker-auth-token", token);
+    response.cookies.set("email-tracker-auth-token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 7 * 24 * 60 * 60,
+    });
     return response;
   } catch (error) {
     console.log("error while logging-in: ", error);
