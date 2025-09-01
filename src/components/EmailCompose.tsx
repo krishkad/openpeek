@@ -35,7 +35,6 @@ const EmailCompose = ({ onBack, onSend }: EmailComposeProps) => {
     immediatelyRender: false,
   });
 
-  const [content, setContent] = useState("<p>Hello World!</p>");
 
   const handleSend = async () => {
     if (
