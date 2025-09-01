@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({
-      success: false,
+      success: true,
       message: "email sent successfully",
       data: updated_email,
     });
