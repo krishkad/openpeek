@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import EmailPreview from "./EmailPreview";
+import { DateOrAllPicker } from "./DateFilter";
 
 export interface Email {
   _id: string;
@@ -38,7 +39,8 @@ const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
   const [selectedEmail, setSelectedEmail] = useState<Email>();
-
+  const [dateFilter, setDateFilter] = useState<Date | "all" | undefined>("all");
+  const [dateFilterOpen, setDateFilterOpen] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
 
   useEffect(() => {
@@ -75,7 +77,12 @@ const Dashboard = () => {
       filter === "all" ||
       (filter === "opened" && email.isOpen) ||
       (filter === "not-opened" && !email.isOpen);
-    return matchesSearch && matchesFilter;
+    const DateFilter =
+      dateFilter === "all" ||
+      new Date(dateFilter as Date).toDateString() ===
+        new Date(email.createdAt).toDateString();
+    console.log({ email: new Date(email.createdAt).toDateString() });
+    return matchesSearch && matchesFilter && DateFilter;
   });
 
   const formatDate = (dateString: string) => {
@@ -94,8 +101,8 @@ const Dashboard = () => {
     }
   };
 
-  const openedCount = emails.filter((e) => e.isOpen).length;
-  const totalCount = emails.length;
+  const openedCount = filteredEmails.filter((e) => e.isOpen).length;
+  const totalCount = filteredEmails.length;
   const openRate = Math.round((openedCount / totalCount) * 100) || 0;
 
   return (
@@ -181,17 +188,25 @@ const Dashboard = () => {
                     className="pl-8 w-64"
                   />
                 </div>
-                <Select value={filter} onValueChange={setFilter}>
-                  <SelectTrigger className="w-32">
-                    <Filter className="h-4 w-4 mr-2" />
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All</SelectItem>
-                    <SelectItem value="opened">Opened</SelectItem>
-                    <SelectItem value="not-opened">Not Opened</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="flex items-center space-x-2">
+                  <DateOrAllPicker
+                    open={dateFilterOpen}
+                    setOpen={setDateFilterOpen}
+                    selection={dateFilter}
+                    setSelection={setDateFilter}
+                  />
+                  <Select value={filter} onValueChange={setFilter}>
+                    <SelectTrigger className="w-32">
+                      <Filter className="h-4 w-4 mr-2" />
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All</SelectItem>
+                      <SelectItem value="opened">Opened</SelectItem>
+                      <SelectItem value="not-opened">Not Opened</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
           </CardHeader>
