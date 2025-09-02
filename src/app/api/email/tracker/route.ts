@@ -73,7 +73,7 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    console.log({ isOpen: updated_email.isOpen });
+    console.log({ isOpen: updated_email.isOpen, openCount: updated_email.openCount });
 
     return new Response(pixel, {
       status: 200,

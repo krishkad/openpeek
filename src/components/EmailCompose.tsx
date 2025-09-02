@@ -41,11 +41,7 @@ const EmailCompose = () => {
       !emailData.from ||
       !editorr?.getHTML()
     ) {
-      //   toast({
-      //     title: "Missing Information",
-      //     description: "Please fill in the recipient and subject fields.",
-      //     variant: "destructive"
-      //   });
+      toast.warning("Missing Information");
       return;
     }
     setIsSubmitting(true);
@@ -83,8 +79,6 @@ const EmailCompose = () => {
     } finally {
       setIsSubmitting(false);
     }
-
-   
 
     console.log({ email: editorr?.getHTML() });
   };
@@ -218,44 +212,7 @@ const EmailCompose = () => {
                   Message
                 </Label>
                 <div className="mt-1">
-                  {/* <ReactQuill
-                    theme="snow"
-                    value={emailData.body}
-                    onChange={(value) => setEmailData(prev => ({ ...prev, body: value }))}
-                    placeholder="Type your message here..."
-                    modules={{
-                      toolbar: [
-                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                        [{ 'font': [] }],
-                        [{ 'size': ['small', false, 'large', 'huge'] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'color': [] }, { 'background': [] }],
-                        [{ 'script': 'sub'}, { 'script': 'super' }],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        [{ 'indent': '-1'}, { 'indent': '+1' }],
-                        [{ 'align': [] }],
-                        ['blockquote', 'code-block'],
-                        ['link', 'image', 'video'],
-                        ['clean'],
-                        ['code-view']
-                      ]
-                    }}
-                    formats={[
-                      'header', 'font', 'size',
-                      'bold', 'italic', 'underline', 'strike',
-                      'color', 'background',
-                      'script',
-                      'list', 'bullet', 'indent',
-                      'align',
-                      'blockquote', 'code-block',
-                      'link', 'image', 'video'
-                    ]}
-                    style={{
-                      minHeight: '300px',
-                      backgroundColor: 'hsl(var(--background))',
-                    }}
-                    className="rich-text-editor"
-                  /> */}
+                 
                   <ModernEmailEditor editor={editorr} />
                 </div>
               </div>

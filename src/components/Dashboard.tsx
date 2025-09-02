@@ -15,13 +15,15 @@ import { Eye, EyeOff, Filter, Mail, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import EmailPreview from "./EmailPreview";
 
-interface Email {
+export interface Email {
   _id: string;
   userId: string;
   subject: string;
   toEmail: string;
   fromEmail: string;
+  body: string;
   isOpen: boolean;
   openCount?: number;
   createdAt: string;
@@ -35,6 +37,9 @@ const Dashboard = () => {
   const [filter, setFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
+  const [selectedEmail, setSelectedEmail] = useState<Email>();
+
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchEmails = async () => {
@@ -53,7 +58,7 @@ const Dashboard = () => {
         }
 
         setEmails(res.data);
-        toast.success("email fetch successful")
+        toast.success("email fetch successful");
       } catch (error) {
         console.log("error while fetching emails: ", error);
         toast.warning("failed to fetch email");
@@ -83,11 +88,9 @@ const Dashboard = () => {
   };
 
   const handleEmailClick = (email: Email) => {
-    if (email.isOpen) {
-      //   toast({
-      //     title: "Email Details",
-      //     description: `Opened on ${formatDate(email.openedDate!)}`,
-      //   });
+    if (email) {
+      setSelectedEmail(email);
+      setIsEmailModalOpen(true);
     }
   };
 
@@ -227,62 +230,71 @@ const Dashboard = () => {
                 </div>
               ) : (
                 <>
-                  {filteredEmails.map((email) => (
-                    <div
-                      key={email._id}
-                      onClick={() => handleEmailClick(email)}
-                      className="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-accent cursor-pointer transition-colors"
-                    >
-                      <div className="flex items-center space-x-4 flex-1">
-                        <div className="flex items-center space-x-2">
-                          {email.isOpen ? (
-                            <Eye className="h-4 w-4 text-green-600" />
-                          ) : (
-                            <EyeOff className="h-4 w-4 text-accent-foreground" />
-                          )}
-                          <Badge
-                            variant={email.isOpen ? "default" : "secondary"}
-                            className={
-                              email.isOpen
-                                ? "bg-green-600 text-white"
-                                : "bg-gray-200 text-foreground"
-                            }
-                          >
-                            {email.isOpen ? "Opened" : "Not Opened"}
-                            {email.openCount !== undefined && email.openCount > 0 && (
-                              <span className="text-white text-xs">
-                                {email.openCount}
-                              </span>
+                  {filteredEmails
+                    .slice()
+                    .reverse()
+                    .map((email) => (
+                      <div
+                        key={email._id}
+                        onClick={() => handleEmailClick(email)}
+                        className="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-accent cursor-pointer transition-colors"
+                      >
+                        <div className="flex items-center space-x-4 flex-1">
+                          <div className="flex items-center space-x-2">
+                            {email.isOpen ? (
+                              <Eye className="h-4 w-4 text-green-600" />
+                            ) : (
+                              <EyeOff className="h-4 w-4 text-accent-foreground" />
                             )}
-                          </Badge>
+                            <Badge
+                              variant={email.isOpen ? "default" : "secondary"}
+                              className={
+                                email.isOpen
+                                  ? "bg-green-600 text-white"
+                                  : "bg-gray-200 text-foreground"
+                              }
+                            >
+                              {email.isOpen ? "Opened" : "Not Opened"}
+                              {email.openCount !== undefined &&
+                                email.openCount > 0 && (
+                                  <span className="text-white text-xs">
+                                    {email.openCount}
+                                  </span>
+                                )}
+                            </Badge>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-foreground truncate">
+                              {email.subject}
+                            </p>
+                            <p className="text-sm text-muted-foreground truncate">
+                              To: {email.toEmail}
+                            </p>
+                          </div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium text-foreground truncate">
-                            {email.subject}
+                        <div className="text-right">
+                          <p className="text-sm text-muted-foreground">
+                            Sent: {formatDate(email.createdAt)}
                           </p>
-                          <p className="text-sm text-muted-foreground truncate">
-                            To: {email.toEmail}
-                          </p>
+                          {email.isOpen && email.updatedAt && (
+                            <p className="text-sm text-green-600">
+                              Opened: {formatDate(email.updatedAt)}
+                            </p>
+                          )}
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">
-                          Sent: {formatDate(email.createdAt)}
-                        </p>
-                        {email.isOpen && email.updatedAt && (
-                          <p className="text-sm text-green-600">
-                            Opened: {formatDate(email.updatedAt)}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+                    ))}
                 </>
               )}
             </div>
           </CardContent>
         </Card>
       </div>
+      <EmailPreview
+        open={isEmailModalOpen}
+        onOpenChange={setIsEmailModalOpen}
+        email={selectedEmail}
+      />
     </div>
   );
 };
