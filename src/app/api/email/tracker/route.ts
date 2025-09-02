@@ -1,4 +1,5 @@
 import { connectToDatabase } from "@/lib/db";
+import { formatToDateMinute } from "@/lib/utils";
 import Email from "@/schema/email";
 import { NextRequest } from "next/server";
 
@@ -37,9 +38,27 @@ export async function GET(req: NextRequest) {
 
     const isEmail = await Email.findById({ _id: id });
 
+    const now = new Date();
     console.log({ isEmail });
 
     if (!isEmail) {
+      return new Response(pixel, {
+        status: 200,
+        headers: {
+          "Content-Type": "image/png",
+          "Content-Length": pixel.length.toString(),
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
+      });
+    }
+
+    const createdAtFormatted = formatToDateMinute(isEmail.createdAt);
+    const nowFormatted = formatToDateMinute(now);
+
+    if (createdAtFormatted === nowFormatted) {
+      console.log("Same date and minute");
       return new Response(pixel, {
         status: 200,
         headers: {
@@ -73,7 +92,10 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    console.log({ isOpen: updated_email.isOpen, openCount: updated_email.openCount });
+    console.log({
+      isOpen: updated_email.isOpen,
+      openCount: updated_email.openCount,
+    });
 
     return new Response(pixel, {
       status: 200,

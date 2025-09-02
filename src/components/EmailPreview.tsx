@@ -1,4 +1,3 @@
-
 import {
   Dialog,
   DialogContent,
@@ -25,7 +24,10 @@ export default function EmailPreview({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl p-6 max-h-[88vh] overflow-y-scroll">
+      <DialogContent
+        className="max-w-3xl p-6 max-h-[88vh] overflow-y-scroll"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle className="flex items-start justify-between gap-4 text-lg font-semibold">
             <div className="flex-1">{email.subject}</div>
@@ -47,15 +49,20 @@ export default function EmailPreview({
 
         <div className="mt-4 space-y-1 text-sm text-muted-foreground border-b pb-4">
           <div>
-            <span className="font-medium text-gray-800">From:</span> {email.fromEmail}
+            <span className="font-medium text-gray-800">From:</span>{" "}
+            {email.fromEmail}
           </div>
           <div>
-            <span className="font-medium text-gray-800">To:</span> {email.toEmail}
+            <span className="font-medium text-gray-800">To:</span>{" "}
+            {email.toEmail}
           </div>
         </div>
 
         <div className="mt-6 text-sm text-gray-900">
-          <div className="prose prose-sm max-w-none space-y-2" dangerouslySetInnerHTML={{ __html: email.body }} />
+          <div
+            className="prose prose-sm max-w-none space-y-2"
+            dangerouslySetInnerHTML={{ __html: email.body }}
+          />
         </div>
       </DialogContent>
     </Dialog>
