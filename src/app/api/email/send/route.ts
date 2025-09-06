@@ -12,7 +12,7 @@ interface CustomJWTPayload extends JwtPayload {
 export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
-    const { to, from, email, trackEnable, subject } = await req.json();
+    const { to, from, email, trackEnable, subject, isClick, redirectUrl} = await req.json();
     const auth_token = req.cookies.get("email-tracker-auth-token")?.value;
 
     if (!auth_token) {
@@ -48,6 +48,8 @@ export async function POST(req: NextRequest) {
       body: email,
       trackEnable,
       userId: token_data.id,
+      isClick: isClick ?? false,
+      redirectUrl: redirectUrl
     });
 
     if (!create_email) {
@@ -63,6 +65,8 @@ export async function POST(req: NextRequest) {
       email: create_email.body,
       id: create_email._id,
       subject: create_email.subject,
+      isClick: isClick ?? false,
+      redirectUrl
     });
 
     if (!email_send.success) {

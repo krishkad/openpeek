@@ -19,6 +19,8 @@ import { toast } from "sonner";
 
 const EmailCompose = () => {
   const [trackingEnabled, setTrackingEnabled] = useState(true);
+  const [isClick, setIsClick] = useState(false);
+  const [redirectUrl, setRedirectUrl] = useState("");
   const [emailData, setEmailData] = useState({
     to: "",
     from: "",
@@ -58,6 +60,8 @@ const EmailCompose = () => {
           subject: emailData.subject,
           email: editorr.getHTML(),
           trackEnable: trackingEnabled,
+          isClick: isClick ?? false,
+          redirectUrl,
         }),
       });
 
@@ -72,6 +76,8 @@ const EmailCompose = () => {
       console.log("email sent successfully");
       toast.success("email sent successfully");
       setEmailData({ to: "", from: "", subject: "", body: "" });
+      setIsClick(false);
+      setRedirectUrl("");
       editorr.setOptions({ content: "<div></div>" });
     } catch (error) {
       console.log("error while sending email: ", error);
@@ -206,13 +212,45 @@ const EmailCompose = () => {
                   className="mt-1"
                 />
               </div>
-
+              <div className="flex items-center justify-end space-x-2">
+                <div className="flex items-center space-x-2">
+                  {isClick ? (
+                    <Eye className="h-4 w-4 text-success" />
+                  ) : (
+                    <EyeOff className="h-4 w-4 text-muted-foreground" />
+                  )}
+                  <Label
+                    htmlFor="redirect-toggle"
+                    className="text-sm font-medium"
+                  >
+                    Track Click 
+                  </Label>
+                  <Switch
+                    id="redirect-toggle"
+                    checked={isClick}
+                    onCheckedChange={setIsClick}
+                  />
+                </div>
+              </div>
+              {isClick && (
+                <div>
+                  <Label htmlFor="redirect-url" className="text-sm font-medium">
+                    Redirect Url
+                  </Label>
+                  <Input
+                    id="redirect-url"
+                    placeholder="Enter redirect url"
+                    value={redirectUrl}
+                    onChange={(e) => setRedirectUrl(e.target.value)}
+                    className="mt-1"
+                  />
+                </div>
+              )}
               <div>
                 <Label htmlFor="body" className="text-sm font-medium">
                   Message
                 </Label>
                 <div className="mt-1">
-                 
                   <ModernEmailEditor editor={editorr} />
                 </div>
               </div>

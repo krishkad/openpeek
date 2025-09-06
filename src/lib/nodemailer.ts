@@ -6,12 +6,16 @@ export const sendEmail = async ({
   email,
   id,
   subject,
+  isClick,
+  redirectUrl
 }: {
   from: string;
   to: string;
   email: string;
   id: string;
   subject: string;
+  isClick?: boolean;
+  redirectUrl?: string
 }): Promise<{ success: boolean; message: string }> => {
   const transporter = nodemailer.createTransport({
     // host: process.env.SMTP_HOST,
@@ -28,12 +32,20 @@ export const sendEmail = async ({
     process.env.NODE_ENV === "production" ? "https" : "http"
   }://${process.env.NEXT_PUBLIC_URL}/api/email/tracker?id=${id}`;
 
-  const htmlBody = `
+  let htmlBody = `
     <div>
     ${email}
     <img src="${trackingUrl}" width="1" height="1" style="display:none;" alt="." />
     </div>
     `;
+
+  if (isClick) {
+    const newhtmlbody = htmlBody.replace("emailId", `${id}`);
+    const finalBody = newhtmlbody.replace("redirectUrl", `${redirectUrl}`);
+    htmlBody = finalBody;
+  }
+
+  console.log({htmlBody})
 
   try {
     await transporter.sendMail({

@@ -39,6 +39,19 @@ const emailSchema = new mongoose.Schema(
       enum: ["sent", "failed", "draft"],
       default: "draft",
     },
+    redirectUrl: {
+      type: String,
+    },
+    trackUrl: {
+      type: String,
+    },
+    isClick: {
+      type: Boolean
+    },
+    clickCount: {
+      type:Number,
+      default: 0
+    }
   },
   { timestamps: true }
 );
