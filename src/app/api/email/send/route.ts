@@ -12,7 +12,8 @@ interface CustomJWTPayload extends JwtPayload {
 export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
-    const { to, from, email, trackEnable, subject, isClick, redirectUrl} = await req.json();
+    const { to, from, email, trackEnable, subject, isClick, redirectUrl } =
+      await req.json();
     const auth_token = req.cookies.get("email-tracker-auth-token")?.value;
 
     if (!auth_token) {
@@ -49,7 +50,7 @@ export async function POST(req: NextRequest) {
       trackEnable,
       userId: token_data.id,
       isClick: isClick ?? false,
-      redirectUrl: redirectUrl
+      redirectUrl: redirectUrl,
     });
 
     if (!create_email) {
@@ -66,7 +67,7 @@ export async function POST(req: NextRequest) {
       id: create_email._id,
       subject: create_email.subject,
       isClick: isClick ?? false,
-      redirectUrl
+      redirectUrl,
     });
 
     if (!email_send.success) {
@@ -76,9 +77,29 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const updated_email = await Email.findByIdAndUpdate(create_email._id, {
-      status: "sent",
-    });
+    let updated_email;
+
+    if (isClick) {
+      let htmlbody = create_email.body.replace(
+        "emailId",
+        `${create_email._id}`
+      );
+      let finalBody = htmlbody.replace(
+        "redirectUrl",
+        `${redirectUrl}`
+      );
+
+      console.log({finalBody})
+      updated_email = await Email.findByIdAndUpdate(create_email._id, {
+        status: "sent",
+        body: finalBody,
+      });
+    } else {
+      updated_email = await Email.findByIdAndUpdate(create_email._id, {
+        status: "sent",
+      });
+      console.log("else condition")
+    }
 
     if (!updated_email) {
       return NextResponse.json({
