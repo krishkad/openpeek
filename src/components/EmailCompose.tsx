@@ -19,7 +19,7 @@ import { toast } from "sonner";
 
 const EmailCompose = () => {
   const [trackingEnabled, setTrackingEnabled] = useState(true);
-  const [isClick, setIsClick] = useState(false);
+  const [isClick, setIsClick] = useState(true);
   const [redirectUrl, setRedirectUrl] = useState("");
   const [emailData, setEmailData] = useState({
     to: "",
