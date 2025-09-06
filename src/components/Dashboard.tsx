@@ -11,7 +11,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Eye, EyeOff, Filter, Mail, Search } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Filter,
+  Link2Off,
+  LinkIcon,
+  Mail,
+  Search,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -27,6 +35,8 @@ export interface Email {
   body: string;
   isOpen: boolean;
   openCount?: number;
+  isClick: boolean;
+  clickCount: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -255,28 +265,51 @@ const Dashboard = () => {
                         className="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-accent cursor-pointer transition-colors"
                       >
                         <div className="flex items-center space-x-4 flex-1">
-                          <div className="flex items-center space-x-2">
-                            {email.isOpen ? (
-                              <Eye className="h-4 w-4 text-green-600" />
-                            ) : (
-                              <EyeOff className="h-4 w-4 text-accent-foreground" />
-                            )}
-                            <Badge
-                              variant={email.isOpen ? "default" : "secondary"}
-                              className={
-                                email.isOpen
-                                  ? "bg-green-600 text-white"
-                                  : "bg-gray-200 text-foreground"
-                              }
-                            >
-                              {email.isOpen ? "Opened" : "Not Opened"}
-                              {email.openCount !== undefined &&
-                                email.openCount > 0 && (
-                                  <span className="text-white text-xs">
-                                    {email.openCount}
-                                  </span>
-                                )}
-                            </Badge>
+                          <div className="w-max space-y-1">
+                            <div className="flex items-center space-x-2">
+                              {email.isOpen ? (
+                                <Eye className="h-4 w-4 text-green-600" />
+                              ) : (
+                                <EyeOff className="h-4 w-4 text-accent-foreground" />
+                              )}
+                              <Badge
+                                variant={email.isOpen ? "default" : "secondary"}
+                                className={
+                                  email.isOpen
+                                    ? "bg-green-600 text-white"
+                                    : "bg-gray-200 text-foreground"
+                                }
+                              >
+                                {email.isOpen ? "Opened" : "Not Opened"}
+                                {email.openCount !== undefined &&
+                                  email.openCount > 0 && (
+                                    <span className="text-white text-xs">
+                                      {email.openCount}
+                                    </span>
+                                  )}
+                              </Badge>
+                            </div>
+                           {email.isClick && <div className="flex items-center space-x-2">
+                              {email.isClick ? (
+                                <LinkIcon className="h-4 w-4 text-primary" />
+                              ) : (
+                                <Link2Off className="h-4 w-4 text-accent-foreground" />
+                              )}
+                              <Badge
+                                variant={
+                                  email.isClick ? "default" : "secondary"
+                                }
+                                className=""
+                              >
+                                {email.isClick ? "Clicked" : "Not Clicked"}
+                                {email.clickCount !== undefined &&
+                                  email.clickCount > 0 && (
+                                    <span className="text-white text-xs">
+                                      {email.clickCount}
+                                    </span>
+                                  )}
+                              </Badge>
+                            </div>}
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="font-medium text-foreground truncate">
