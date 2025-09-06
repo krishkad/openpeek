@@ -41,9 +41,10 @@ const logClick = async ({
 };
 
 export async function GET(req: NextRequest) {
-  const emailId = req.nextUrl.searchParams.get("id");
-  const target = req.nextUrl.searchParams.get("url");
-  console.log({ url: req.nextUrl.toString() });
+  const emailId = decodeURIComponent(req.nextUrl.searchParams.get("id") || "");
+  const target = decodeURIComponent(req.nextUrl.searchParams.get("url") || "");
+
+  console.log({ url: req.nextUrl.toString(), emailId, target });
   if (!emailId || !target) {
     return NextResponse.json({ error: "Missing parameters" }, { status: 400 });
   }
