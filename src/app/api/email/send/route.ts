@@ -80,11 +80,11 @@ export async function POST(req: NextRequest) {
     let updated_email;
 
     if (isClick) {
-      let htmlbody = create_email.body.replace(
+      const htmlbody = create_email.body.replace(
         "emailId",
         `${create_email._id}`
       );
-      let finalBody = htmlbody.replace(
+      const finalBody = htmlbody.replace(
         "redirectUrl",
         `${redirectUrl}`
       );
