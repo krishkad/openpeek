@@ -223,7 +223,7 @@ const EmailCompose = () => {
                     htmlFor="redirect-toggle"
                     className="text-sm font-medium"
                   >
-                    Track Click 
+                    Track Click
                   </Label>
                   <Switch
                     id="redirect-toggle"
@@ -241,6 +241,7 @@ const EmailCompose = () => {
                     id="redirect-url"
                     placeholder="Enter redirect url"
                     value={redirectUrl}
+                    required={isClick}
                     onChange={(e) => setRedirectUrl(e.target.value)}
                     className="mt-1"
                   />

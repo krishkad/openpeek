@@ -31,9 +31,14 @@ export default function EmailPreview({
         <DialogHeader>
           <DialogTitle className="flex items-start justify-between gap-4 text-lg font-semibold">
             <div className="flex-1">{email.subject}</div>
-            <Badge variant={email.isOpen ? "default" : "secondary"}>
-              {email.isOpen ? "Opened" : "Not Opened"}
-            </Badge>
+            <div className="w-max space-x-1">
+              <Badge variant={email.isOpen ? "default" : "secondary"}>
+                {email.isOpen ? "Opened" : "Not Opened"}
+              </Badge>
+              <Badge variant={email.isClick ? "default" : "secondary"}>
+                {email.isClick ? "Clicked" : "Not Clicked"}
+              </Badge>
+            </div>
           </DialogTitle>
 
           <DialogDescription className="text-sm text-muted-foreground mt-1">

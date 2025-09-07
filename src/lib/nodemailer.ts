@@ -7,7 +7,7 @@ export const sendEmail = async ({
   id,
   subject,
   isClick,
-  redirectUrl
+  redirectUrl,
 }: {
   from: string;
   to: string;
@@ -15,7 +15,7 @@ export const sendEmail = async ({
   id: string;
   subject: string;
   isClick?: boolean;
-  redirectUrl?: string
+  redirectUrl?: string;
 }): Promise<{ success: boolean; message: string }> => {
   const transporter = nodemailer.createTransport({
     // host: process.env.SMTP_HOST,
@@ -40,12 +40,15 @@ export const sendEmail = async ({
     `;
 
   if (isClick) {
+    if (!redirectUrl) {
+      return { success: false, message: "redirect url missing" };
+    }
     const newhtmlbody = htmlBody.replace("emailId", `${id}`);
     const finalBody = newhtmlbody.replace("redirectUrl", `${redirectUrl}`);
     htmlBody = finalBody;
   }
 
-  console.log({htmlBody})
+  console.log({ htmlBody });
 
   try {
     await transporter.sendMail({
