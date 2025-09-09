@@ -66,12 +66,13 @@ export async function POST(req: NextRequest) {
       id: create_email._id,
       subject: create_email.subject,
       redirectUrl,
+      isClick: isClick ?? false
     });
 
     if (!email_send.success) {
       return NextResponse.json({
         success: false,
-        message: "failed to sent email",
+        message: email_send.message,
       });
     }
 
