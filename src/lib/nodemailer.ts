@@ -48,10 +48,10 @@ export const sendEmail = async ({
     htmlBody = finalBody;
   }
 
-  const isEmailValid =
+  const isEmailInValid =
     htmlBody.includes("emailId") || htmlBody.includes("redirectUrl");
 
-  if (!isEmailValid) {
+  if (isEmailInValid) {
     return { success: false, message: "emailId or redirectUrl missing" };
   }
 
