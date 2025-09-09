@@ -49,7 +49,6 @@ export async function POST(req: NextRequest) {
       body: email,
       trackEnable,
       userId: token_data.id,
-      isClick: isClick ?? false,
       redirectUrl: redirectUrl,
     });
 
@@ -66,7 +65,6 @@ export async function POST(req: NextRequest) {
       email: create_email.body,
       id: create_email._id,
       subject: create_email.subject,
-      isClick: isClick ?? false,
       redirectUrl,
     });
 
