@@ -45,6 +45,12 @@ export async function GET(req: NextRequest) {
   const target = decodeURIComponent(req.nextUrl.searchParams.get("url") || "");
 
   console.log({ url: req.nextUrl.toString(), emailId, target });
+  console.log("Email opened:", {
+    emailId,
+    ip: req.headers.get("x-forwarded-for") || "unknown",
+    userAgent: req.headers.get("user-agent"),
+  });
+
   if (!emailId || !target) {
     return NextResponse.json({ error: "Missing parameters" }, { status: 400 });
   }
